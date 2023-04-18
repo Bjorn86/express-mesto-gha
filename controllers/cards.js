@@ -48,13 +48,13 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .orFail(() => {
-      throw new DocumentNotFoundError('Указанная карточка не найдена');
+      throw new CastError();
     })
     .then(() => res.send({ message: 'Пост удалён' }))
     .catch((err) => {
-      if (err instanceof DocumentNotFoundError) {
+      if (err instanceof CastError) {
         return res.status(NOT_FOUND_ERROR_CODE).send({
-          message: `${err.query}`,
+          message: `Указанная карточка не найдена ${err.message}`,
         });
       }
       return res.status(DEFAULT_ERROR_CODE).send({

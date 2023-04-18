@@ -1,5 +1,9 @@
 // IMPORT PACKAGES
-const { ValidationError, DocumentNotFoundError } = require('mongoose').Error;
+const {
+  ValidationError,
+  DocumentNotFoundError,
+  CastError,
+} = require('mongoose').Error;
 
 // IMPORT MODELS
 const User = require('../models/user');
@@ -22,16 +26,14 @@ module.exports.getAllUsers = (req, res) => {
 // GET USER
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => {
-      if (!user) {
-        throw new DocumentNotFoundError('Запрашиваемый пользователь не найден');
-      }
-      return res.send(user);
+    .orFail(() => {
+      throw new CastError();
     })
+    .then((user) => res.send(user))
     .catch((err) => {
-      if (err instanceof DocumentNotFoundError) {
+      if (err instanceof CastError) {
         return res.status(NOT_FOUND_ERROR_CODE).send({
-          message: `${err.query}`,
+          message: `Запрашиваемый пользователь не найден. ${err.message}`,
         });
       }
       return res.status(DEFAULT_ERROR_CODE).send({
