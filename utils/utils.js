@@ -22,7 +22,7 @@ module.exports.errorsHandler = (err, res) => {
   }
   if (err instanceof DocumentNotFoundError) {
     return res.status(NOT_FOUND_ERROR_CODE).send({
-      message: `${err.query}`,
+      message: 'В базе данных не найден документ с таким ID',
     });
   }
   if (err instanceof CastError) {

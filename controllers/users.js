@@ -1,6 +1,3 @@
-// IMPORT PACKAGES
-const { DocumentNotFoundError } = require('mongoose').Error;
-
 // IMPORT HANDLERS
 const { errorsHandler } = require('../utils/utils');
 
@@ -20,9 +17,7 @@ module.exports.getAllUsers = (req, res) => {
 // GET USER
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .orFail(() => {
-      throw new DocumentNotFoundError('Пользователь с таким ID не найден');
-    })
+    .orFail()
     .then((user) => res.send(user))
     .catch((err) => errorsHandler(err, res));
 };
@@ -39,9 +34,7 @@ module.exports.createUser = (req, res) => {
 const userUpdate = (req, res, updateData) => {
   const userId = req.user._id;
   User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true })
-    .orFail(() => {
-      throw new DocumentNotFoundError('Пользователь с таким ID не найден');
-    })
+    .orFail()
     .then((user) => res.send(user))
     .catch((err) => errorsHandler(err, res));
 };

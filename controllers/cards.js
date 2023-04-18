@@ -1,6 +1,3 @@
-// IMPORT PACKAGES
-const { DocumentNotFoundError } = require('mongoose').Error;
-
 // IMPORT HANDLERS
 const { errorsHandler } = require('../utils/utils');
 
@@ -31,9 +28,7 @@ module.exports.createCard = (req, res) => {
 // DELETE CARD
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
-    .orFail(() => {
-      throw new DocumentNotFoundError('Карточка с таким ID не найдена');
-    })
+    .orFail()
     .then(() => res.send({ message: 'Пост удалён' }))
     .catch((err) => errorsHandler(err, res));
 };
@@ -41,9 +36,7 @@ module.exports.deleteCard = (req, res) => {
 // CARD LIKES UPDATE COMMON METHOD
 const cardLikesUpdate = (req, res, updateData) => {
   Card.findByIdAndUpdate(req.params.cardId, updateData, { new: true })
-    .orFail(() => {
-      throw new DocumentNotFoundError('Карточка с таким ID не найдена');
-    })
+    .orFail()
     .then((card) => card.populate(['owner', 'likes']))
     .then((card) => res.send(card))
     .catch((err) => errorsHandler(err, res));
