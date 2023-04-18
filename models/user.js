@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+}, { versionKey: false });
 
 // MODULE EXPORT
 module.exports = mongoose.model('user', userSchema);

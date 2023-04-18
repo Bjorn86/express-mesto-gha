@@ -1,11 +1,9 @@
 // IMPORT PACKAGES
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 
 // IMPORT ROUTES
-const users = require('./routes/users');
-const cards = require('./routes/cards');
+const rootRouter = require('./routes/index');
 
 // SERVER VARIABLES
 const { PORT = 3000 } = process.env;
@@ -17,21 +15,18 @@ const app = express();
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 // PARSER METHODS
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 // TEMP USER MIDDLEWARE
 app.use((req, res, next) => {
   req.user = {
-    _id: '643ac76a5ef140c3000bad0d',
+    _id: '643d4099e0bb074137c48111',
   };
-
   next();
 });
 
-// ROUTES METHODS
-app.use('/users', users);
-app.use('/cards', cards);
+// ROUTES METHOD
+app.use('/', rootRouter);
 
 // SERVER LISTENER
 app.listen(PORT);
