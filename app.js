@@ -1,6 +1,7 @@
 // IMPORT PACKAGES
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 // IMPORT ROUTES
 const rootRouter = require('./routes/index');
@@ -14,16 +15,9 @@ const app = express();
 // DATABASE CONNECT
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
-// PARSER METHODS
+// PARSERS METHODS
 app.use(express.json());
-
-// TEMP USER MIDDLEWARE
-app.use((req, res, next) => {
-  req.user = {
-    _id: '643d4099e0bb074137c48111',
-  };
-  next();
-});
+app.use(cookieParser());
 
 // ROUTES METHOD
 app.use('/', rootRouter);

@@ -27,9 +27,16 @@ module.exports.createCard = (req, res) => {
 
 // DELETE CARD
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.cardId)
-    .orFail()
-    .then(() => res.send({ message: 'Пост удалён' }))
+  Card.deleteOne({ _id: req.params.cardId, owner: req.user._id })
+    .then((result) => {
+      if (result.deletedCount === 0) {
+        res.send({
+          message: `Карточка с id ${req.params.cardId} отсутствует или не принадлежит пользователю с id ${req.user._id}`,
+        }); // TODO доработать с учётом общего обработчика ошибок
+      } else {
+        res.send({ message: 'Пост удалён' });
+      }
+    })
     .catch((err) => errorsHandler(err, res));
 };
 
