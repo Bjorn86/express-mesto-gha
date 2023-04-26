@@ -1,19 +1,21 @@
-// IMPORT PACKAGES
+// IMPORT ERRORS
 const {
   ValidationError,
   DocumentNotFoundError,
   CastError,
 } = require('mongoose').Error;
+const AuthorizationError = require('../errors/authorizationError');
 
 // IMPORT VARIABLES
 const {
   BAD_REQUEST_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
+  CONFLICT_ERROR_CODE,
   DEFAULT_ERROR_CODE,
-} = require('./constants');
+} = require('../utils/constants');
 
-// ERRORS HANDLER
-module.exports.errorsHandler = (err, res) => {
+// ERRORS MIDDLEWARE
+module.exports = ((err, req, res, next) => {
   if (err instanceof ValidationError) {
     const errorMessage = Object.values(err.errors).map((error) => error.message).join(' ');
     return res.status(BAD_REQUEST_ERROR_CODE).send({
@@ -22,7 +24,7 @@ module.exports.errorsHandler = (err, res) => {
   }
   if (err instanceof DocumentNotFoundError) {
     return res.status(NOT_FOUND_ERROR_CODE).send({
-      message: 'В базе данных не найден документ с таким ID',
+      message: 'В базе данных не найден документ с таким ID, либо вы не являетесь его владельцем',
     });
   }
   if (err instanceof CastError) {
@@ -30,7 +32,17 @@ module.exports.errorsHandler = (err, res) => {
       message: `Передан некорректный ID: ${err.value}`,
     });
   }
+  if (err instanceof AuthorizationError) {
+    return res.status(err.statusCode).send({
+      message: err.message,
+    });
+  }
+  if (err.code === 11000) {
+    return res.status(CONFLICT_ERROR_CODE).send({
+      message: 'Указанный email уже зарегистрирован. Пожалуйста используйте уникальный email',
+    });
+  }
   return res.status(DEFAULT_ERROR_CODE).send({
     message: `Произошла неизвестная ошибка ${err.name}: ${err.message}`,
   });
-};
+});

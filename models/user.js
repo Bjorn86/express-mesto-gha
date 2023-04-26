@@ -3,37 +3,44 @@ const mongoose = require('mongoose');
 const isEmail = require('validator/lib/isEmail');
 const bcrypt = require('bcryptjs');
 
+// IMPORT VARIABLES
+const { LINK_REGEXP } = require('../utils/constants');
+
 // USER SCHEMA
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength: 2,
-    maxlength: 30,
+    minlength: [2, 'Минимальная длина поля "name" 2 символа'],
+    maxlength: [30, 'Максимальная длина поля "name" 30 символов'],
     default: 'Жак-Ив Кусто',
   },
   about: {
     type: String,
-    minlength: 2,
-    maxlength: 30,
+    minlength: [2, 'Минимальная длина поля "about" 2 символа'],
+    maxlength: [30, 'Максимальная длина поля "about" 30 символов'],
     default: 'Исследователь',
   },
   avatar: {
     type: String,
+    validate: {
+      validator: (v) => LINK_REGEXP.test(v),
+      message: 'Неправильный формат ссылки',
+    },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   email: {
     type: String,
     unique: true,
-    required: true,
+    required: [true, 'Поле "email" должно быть заполнено'],
     validate: {
       validator: (v) => isEmail(v),
-      message: 'Неправильный формат почты', // TODO добавить такие сообщения везде где может появиться ошибка валидации
+      message: 'Неправильный формат почты',
     },
   },
   password: {
     type: String,
-    required: true,
-    minlength: 8,
+    required: [true, 'Поле "password" должно быть заполнено'],
+    minlength: [8, 'Минимальная длина поля "password" 8 символов'],
     select: false,
   },
 }, {

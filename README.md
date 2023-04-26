@@ -37,17 +37,29 @@
   - `/cards/:cardId/likes` — обрабатывает:
     - PUT запросы — добавляет лайк карточке с контентом
     - DELETE запросы — удаляет лайк карточке с контентом
+  - `/signin` — обрабатывает POST запросы, производит аутентификацию пользователя
+  - `/signup` — обрабатывает POST запросы, производит регистрацию пользователя
   - `/users` — обрабатывает:
     - GET запросы — отдаёт всех пользователей из БД
     - POST запросы — создаёт нового пользователя
   - `/users/:userId` — обрабатывает GET запросы, отдаёт пользователя по `userId`
-  - `/users/me` — обрабатывает PATCH запросы, обновляет информацию о пользователе
+  - `/users/me` — обрабатывает:
+    - GET запросы — отдаёт информацию о текущем пользователе
+    - PATCH запросы — обновляет информацию о пользователе
   - `/users/me/avatar` — обрабатывает PATCH запросы, обновляет аватар пользователя
-- Создана обработка ошибок при некорректных запросах
+- Созданы мидлвары:
+  - Централизованной обработки ошибок
+  - Авторизации пользователя
+  - Ограничитель количества запросов (защита от DDoS атак)
+- Производится валидация поступающих данных:
+  - до передачи информации контроллерам с помощью joi и celebrate
+  - на уровне схем с помощью validator и встроенных методов mongoose
 
 ### Директории проекта
 
 - `/controllers` — директория с файлами контроллеров
+- `/errors` — директория с файлами кастомных ошибок
+- `/middlewares` — директория с мидлварами
 - `/models` — директория с файлами описания схем и моделей
 - `/routes` — директория с файлами роутера
 - `/utils` — директория со вспомогательными файлами
@@ -67,10 +79,18 @@
 ### Используемые технологии
 
 - [Node.js](https://nodejs.org/ru)
-- [nodemon](https://nodemon.io/) - Node.js tool
-- [Express](https://expressjs.com/) - Node.js framework
+- [nodemon](https://nodemon.io/)
+- [Express](https://expressjs.com/)
+- [cookie-parser](https://www.npmjs.com/package/cookie-parser)
 - [MongoDB](https://www.mongodb.com/)
-- [mongoose](https://mongoosejs.com/) - MongoDB ODM
+- [mongoose](https://mongoosejs.com/)
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
+- [joi](https://joi.dev/)
+- [celebrate](https://www.npmjs.com/package/celebrate)
+- [validator](https://www.npmjs.com/package/validator)
+- [express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
+- [helmet](https://helmetjs.github.io/)
 - [ESLint](https://eslint.org/)
 
 ### Чему я научился работая над проектом
@@ -82,6 +102,10 @@
 - Создавать схемы и модели для работы с БД
 - Обрабатывать различные виды запросов
 - Обрабатывать ошибки некорректных запросов
+- Валидировать приходящую в запросе информацию
+- Работать с JWT токеном
+- Работать с cookies
+- Базовой защите приложения
 
 ## Автор
 
