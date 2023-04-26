@@ -25,7 +25,7 @@ module.exports = ((err, req, res, next) => {
   }
   if (err instanceof DocumentNotFoundError) {
     return res.status(NOT_FOUND_ERROR_CODE).send({
-      message: 'В базе данных не найден документ с таким ID, либо вы не являетесь его владельцем',
+      message: 'В базе данных не найден документ с таким ID',
     });
   }
   if (err instanceof CastError) {
