@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const isEmail = require('validator/lib/isEmail');
 const bcrypt = require('bcryptjs');
 
+// IMPORT ERRORS
+const AuthorizationError = require('../errors/authorizationError');
+
 // IMPORT VARIABLES
 const { LINK_REGEXP } = require('../utils/constants');
 
@@ -51,12 +54,12 @@ const userSchema = new mongoose.Schema({
       return this.findOne({ email }).select('+password')
         .then((user) => {
           if (!user) {
-            return Promise.reject(new Error('Неправильная почта или пароль'));
+            throw new AuthorizationError('Неправильная почта или пароль');
           }
           return bcrypt.compare(password, user.password)
             .then((matched) => {
               if (!matched) {
-                return Promise.reject(new Error('Неправильная почта или пароль'));
+                throw new AuthorizationError('Неправильная почта или пароль');
               }
               return user;
             });

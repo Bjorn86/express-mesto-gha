@@ -5,6 +5,7 @@ const {
   CastError,
 } = require('mongoose').Error;
 const AuthorizationError = require('../errors/authorizationError');
+const ForbiddenError = require('../errors/forbiddenError');
 
 // IMPORT VARIABLES
 const {
@@ -37,12 +38,18 @@ module.exports = ((err, req, res, next) => {
       message: err.message,
     });
   }
-  if (err.code === 11000) {
-    return res.status(CONFLICT_ERROR_CODE).send({
-      message: 'Указанный email уже зарегистрирован. Пожалуйста используйте уникальный email',
+  if (err instanceof ForbiddenError) {
+    return res.status(err.statusCode).send({
+      message: err.message,
     });
   }
-  return res.status(DEFAULT_ERROR_CODE).send({
+  if (err.code === 11000) {
+    return res.status(CONFLICT_ERROR_CODE).send({
+      message: 'Указанный email уже зарегистрирован. Пожалуйста используйте другой email',
+    });
+  }
+  res.status(DEFAULT_ERROR_CODE).send({
     message: `Произошла неизвестная ошибка ${err.name}: ${err.message}`,
   });
+  return next();
 });

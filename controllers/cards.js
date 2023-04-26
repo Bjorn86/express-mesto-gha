@@ -4,6 +4,9 @@ const { CREATE_CODE } = require('../utils/constants');
 // IMPORT MODELS
 const Card = require('../models/card');
 
+// IMPORT ERRORS
+const ForbiddenError = require('../errors/forbiddenError');
+
 // GET ALL CARDS
 module.exports.getAllCards = (req, res, next) => {
   Card.find({})
@@ -25,8 +28,13 @@ module.exports.createCard = (req, res, next) => {
 // DELETE CARD
 module.exports.deleteCard = (req, res, next) => {
   Card.deleteOne({ _id: req.params.cardId, owner: req.user._id })
-    .orFail()
-    .then(() => res.send({ message: 'Пост удалён' }))
+    .then((result) => {
+      if (result.deletedCount === 0) {
+        throw new ForbiddenError(`Карточка с id ${req.params.cardId} отсутствует или не принадлежит пользователю с id ${req.user._id}`);
+      } else {
+        res.send({ message: 'Пост удалён' });
+      }
+    })
     .catch(next);
 };
 
