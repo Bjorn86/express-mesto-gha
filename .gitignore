@@ -15,4 +15,4 @@ node_modules
 .vscode
 
 # Env variables
-.env
+*.env
