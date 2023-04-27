@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // IMPORT PACKAGES
 const express = require('express');
 const mongoose = require('mongoose');
@@ -12,14 +14,15 @@ const rootRouter = require('./routes/index');
 const limiter = require('./middlewares/limiter');
 const errors = require('./middlewares/errors');
 
-// SERVER VARIABLES
-const { PORT = 3000 } = process.env;
+// CONFIG VARIABLES
+const PORT = process.env.PORT || 3000;
+const { DATABASE } = process.env;
 
 // APP VARIABLES
 const app = express();
 
 // DATABASE CONNECT
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect(DATABASE);
 
 // PARSERS METHODS
 app.use(express.json());

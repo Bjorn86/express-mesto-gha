@@ -6,6 +6,7 @@ const {
 } = require('mongoose').Error;
 const AuthorizationError = require('../errors/authorizationError');
 const ForbiddenError = require('../errors/forbiddenError');
+const NotFoundError = require('../errors/notFoundError');
 
 // IMPORT VARIABLES
 const {
@@ -39,6 +40,11 @@ module.exports = ((err, req, res, next) => {
     });
   }
   if (err instanceof ForbiddenError) {
+    return res.status(err.statusCode).send({
+      message: err.message,
+    });
+  }
+  if (err instanceof NotFoundError) {
     return res.status(err.statusCode).send({
       message: err.message,
     });

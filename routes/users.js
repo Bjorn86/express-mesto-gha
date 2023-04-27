@@ -18,37 +18,27 @@ const { LINK_REGEXP } = require('../utils/constants');
 router.get('/', getAllUsers);
 
 // GET USER INFO ROUTE
-router.get('/me', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
-}), getUserInfo);
+router.get('/me', getUserInfo);
 
 // GET USER ROUTE
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().alphanum().length(24),
+    userId: Joi.string().hex().length(24),
   }),
 }), getUser);
 
 // UPDATE USER INFO ROUTE
 router.patch('/me', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
   }),
 }), updateUserInfo);
 
 // UPDATE USER AVATAR ROUTE
 router.patch('/me/avatar', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
   body: Joi.object().keys({
-    avatar: Joi.string().regex(LINK_REGEXP),
+    avatar: Joi.string().required().regex(LINK_REGEXP),
   }),
 }), updateUserAvatar);
 

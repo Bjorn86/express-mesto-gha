@@ -1,9 +1,7 @@
-// IMPORT VARIABLES
-const { NOT_FOUND_ERROR_CODE } = require('../utils/constants');
+// IMPORT ERRORS
+const NotFoundError = require('../errors/notFoundError');
 
 // NOT FOUNDED ROUTE
-module.exports.notFound = (req, res) => {
-  res.status(NOT_FOUND_ERROR_CODE).send({
-    message: 'Указан несуществующий URL',
-  });
+module.exports.notFound = (req, res, next) => {
+  next(new NotFoundError('Указан несуществующий URL'));
 };

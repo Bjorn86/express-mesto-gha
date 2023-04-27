@@ -19,9 +19,6 @@ router.get('/', getAllCards);
 
 // CREATE CARD ROUTE
 router.post('/', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().regex(LINK_REGEXP),
@@ -30,31 +27,22 @@ router.post('/', celebrate({
 
 // DELETE CARD ROUTE
 router.delete('/:cardId', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().hex().length(24),
   }),
 }), deleteCard);
 
 // LIKE CARD ROUTE
 router.put('/:cardId/likes', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().hex().length(24),
   }),
 }), likeCard);
 
 // DISLIKE CARD ROUTE
 router.delete('/:cardId/likes', celebrate({
-  query: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24),
-  }),
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().hex().length(24),
   }),
 }), dislikeCard);
 

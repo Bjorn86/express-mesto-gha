@@ -8,6 +8,9 @@ const { CREATE_CODE } = require('../utils/constants');
 // IMPORT MODELS
 const User = require('../models/user');
 
+// CONFIG VARIABLES
+const { NODE_ENV, SECRET_KEY } = process.env;
+
 // GET ALL USERS
 module.exports.getAllUsers = (req, res, next) => {
   User.find({})
@@ -15,20 +18,24 @@ module.exports.getAllUsers = (req, res, next) => {
     .catch(next);
 };
 
-// GET USER
-module.exports.getUser = (req, res, next) => {
-  User.findById(req.params.userId)
+// FIND USER BY ID COMMON METHOD
+const findUserById = (req, res, requiredData, next) => {
+  User.findById(requiredData)
     .orFail()
     .then((user) => res.send(user))
     .catch(next);
 };
 
+// GET USER
+module.exports.getUser = (req, res, next) => {
+  const requiredData = req.params.userId;
+  findUserById(req, res, requiredData, next);
+};
+
 // GET USER INFO
 module.exports.getUserInfo = (req, res, next) => {
-  User.findById(req.user._id)
-    .orFail()
-    .then((user) => res.send(user))
-    .catch(next);
+  const requiredData = req.user._id;
+  findUserById(req, res, requiredData, next);
 };
 
 // CREATE USER
@@ -83,7 +90,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        '2fd5f67c6932c07ff787bf9e0813eb1ae0175e15a0f2ae4b2b508a3765ab93ae',
+        NODE_ENV === 'production' ? SECRET_KEY : 'dev-secret-key',
         { expiresIn: '7d' },
       );
       res.cookie('jwt', token, {
