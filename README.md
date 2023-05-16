@@ -1,6 +1,6 @@
-[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+[![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 
-# Проект: Место (frontend + backend)
+# Проект: Место (backend)
 
 Учебный проект выполненный в рамках курса "Веб-разработчик" от Яндекс Практикум.
 Проект представляет из себя бэкенд часть для проекта [Место](https://github.com/Bjorn86/react-mesto-auth) также выполненного в рамках указанного выше учебного курса.
@@ -113,3 +113,4 @@
 
 - e-mail: [legkobytov-danila@yandex.ru](mailto:legkobytov-danila@yandex.ru)
 - Telegram: [@danila_legkobytov](https://t.me/danila_legkobytov)
+- LinkedIn: [in/danila-legkobytov](https://www.linkedin.com/in/danila-legkobytov/)
